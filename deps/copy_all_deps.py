@@ -1,5 +1,6 @@
 import os
 import shutil
+import py7zr
 
 # CONSTANTS
 DEPS_EXE_FILE = "deps_exe"
@@ -7,6 +8,10 @@ DEPS_ONE_LEVEL_ABOVE_EXE_FILE = "deps_above_exe"
 RELEASE_DIR_NAME = "release"
 DEBUG_DIR_NAME = "debug"
 LEVELS_UP_TO_BUILD_DIRS = "../../"
+ARHIV_FILES = [".7z","zip","rar"]
+
+# ARHIV UNPACKED FILES FOR DELETING AFTER RESOLVING DEPS
+unpacked_folders = []
 
 # FUNCTIONS
 def copytree(src, dst, symlinks=False, ignore=None):
@@ -30,6 +35,16 @@ def make_release_or_debug_path(out):
             r_d = r_d + DEBUG_DIR_NAME
         return r_d
 
+def is_file_arhiv(file):
+    for check in ARHIV_FILES:
+        if check in file.lower():
+           return True
+    return False
+
+def unpack(file,out):
+   archive = py7zr.SevenZipFile(file, mode='r')
+   archive.extractall(out)
+   archive.close() 
 
 
 # SCRIPT FOR RESOLVING ALL DEPENDENCIES
@@ -73,6 +88,9 @@ for file in files_in_exe_list:
             print('RELEASE DEBUG UNEXPECTED ERROR',out)
             continue     
         if os.path.isfile(file):
+           if is_file_arhiv (file):
+              unpack(file, LEVELS_UP_TO_BUILD_DIRS + out + r_d)
+              continue
            print("file exists: " + file)
            print(f"copy exe file deps {file} to: -->", LEVELS_UP_TO_BUILD_DIRS + out + r_d)
            shutil.copy(file, LEVELS_UP_TO_BUILD_DIRS + out + r_d)
@@ -92,6 +110,8 @@ for file in files_in_above_exe_list:
     file = DEPS_ONE_LEVEL_ABOVE_EXE_FILE + "/" + file
     for out in out_dir_list:
         if os.path.isfile(file):
+            if is_file_arhiv (file):
+               continue
             file_name = LEVELS_UP_TO_BUILD_DIRS + out
             print(f"copy file deps {file} to: --> {file_name}")
             shutil.copy(file, file_name)

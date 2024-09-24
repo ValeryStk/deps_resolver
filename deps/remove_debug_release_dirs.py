@@ -2,8 +2,6 @@ import os
 import shutil
 
 # CONSTANTS
-DEPS_EXE_FILE = "deps_exe"
-DEPS_ONE_LEVEL_ABOVE_EXE_FILE = "deps_above_exe"
 RELEASE_DIR_NAME = "release"
 DEBUG_DIR_NAME = "debug"
 LEVELS_UP_TO_BUILD_DIRS = "../../"
@@ -30,15 +28,3 @@ for file in build_dirs_list:
                     os.remove(path+file_or_folder_for_deleting)
             if os.path.isdir(path+file_or_folder_for_deleting):
                    shutil.rmtree(path+file_or_folder_for_deleting)
-         
-    """if os.path.isfile(file):
-        os.remove(file)
-    if(os.path.isdir):
-        shutil.rmtree(file)"""
-    """full_release_path = LEVELS_UP_TO_BUILD_DIRS + dir + "/" + RELEASE_DIR_NAME
-    full_debug_path = LEVELS_UP_TO_BUILD_DIRS + dir + "/" + DEBUG_DIR_NAME
-    print ("FULL_PATH: " + full_release_path)
-    if os.path.exists(full_release_path):
-       shutil.rmtree(full_release_path)
-    if os.path.exists(full_debug_path):
-       shutil.rmtree(full_debug_path)"""

@@ -30,13 +30,6 @@ def make_release_or_debug_path(out):
             r_d = r_d + DEBUG_DIR_NAME
         return r_d
 
-def create_dir_if_not_exist(path_to_dir):
-    base_name_ = os.path.basename(path_to_dir)
-    full_path = path_to_dir + "/" + base_name_
-    if not os.path.exists(full_path):
-       os.mkdir(full_path)
-    return full_path
-
 
 
 # SCRIPT FOR RESOLVING ALL DEPENDENCIES
@@ -85,8 +78,13 @@ for file in files_in_exe_list:
            shutil.copy(file, LEVELS_UP_TO_BUILD_DIRS + out + r_d)
         if os.path.isdir(file):
            file_name = LEVELS_UP_TO_BUILD_DIRS + out + r_d
-           print(f"copy exe dir deps {file} to: --> {file_name}")
-           copytree(file, file_name)
+           print(f"copy dir deps {file} to: --> {file_name}")
+           base_name_ = os.path.basename(file)
+           print("BASE NAME: -- >" + base_name_)
+           full_path = file_name + "/" + base_name_
+           if not os.path.exists(full_path):
+               os.mkdir(full_path)
+           copytree(file, full_path)
 
 
 print('STEP 4 - Copy files to build one level above exe dir')
@@ -102,7 +100,8 @@ for file in files_in_above_exe_list:
             print(f"copy dir deps {file} to: --> {file_name}")
             base_name_ = os.path.basename(file)
             print("BASE NAME: -- >" + base_name_)
-            if not os.path.exists(file_name + "/" + base_name_):
-               os.mkdir(file_name + "/" + base_name_)
-            copytree(file, file_name)
+            full_path = file_name + "/" + base_name_
+            if not os.path.exists(full_path):
+               os.mkdir(full_path)
+            copytree(file, full_path)
 

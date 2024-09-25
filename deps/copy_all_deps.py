@@ -18,7 +18,7 @@ DEPS_ONLY_FOR_RELEASE = "deps_only_for_release"
 RELEASE_DIR_NAME = "release"
 DEBUG_DIR_NAME = "debug"
 LEVELS_UP_TO_BUILD_DIRS = "../../"
-ARHIV_FILES = [".7z","zip","rar"]
+ARHIV_FILES = [".7z"]
 EXTRA_DIR_FOR_OUT = "/MainApp"
 
 # ARRAY FOR OUT DIRS

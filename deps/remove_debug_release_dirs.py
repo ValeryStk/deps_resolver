@@ -5,6 +5,7 @@ import shutil
 RELEASE_DIR_NAME = "release"
 DEBUG_DIR_NAME = "debug"
 LEVELS_UP_TO_BUILD_DIRS = "../../"
+EXTRA_DIR_FOR_OUT = "MainApp/"
 
 print('Cleaning debug release directories')
 
@@ -19,7 +20,7 @@ for dir in os.listdir(LEVELS_UP_TO_BUILD_DIRS):
     build_dirs_list.append(dir)
 
 for file in build_dirs_list:
-    path = LEVELS_UP_TO_BUILD_DIRS+file+"/"
+    path = LEVELS_UP_TO_BUILD_DIRS + file + "/" + EXTRA_DIR_FOR_OUT
     files_and_folders_list = os.listdir(path)
     print(files_and_folders_list)
     for file_or_folder_for_deleting in files_and_folders_list:

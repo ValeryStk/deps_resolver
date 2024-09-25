@@ -19,6 +19,7 @@ RELEASE_DIR_NAME = "release"
 DEBUG_DIR_NAME = "debug"
 LEVELS_UP_TO_BUILD_DIRS = "../../"
 ARHIV_FILES = [".7z","zip","rar"]
+EXTRA_DIR_FOR_OUT = "/MainApp"
 
 # ARRAY FOR OUT DIRS
 out_dir_list = []
@@ -73,19 +74,19 @@ def resolve_deps(files_list, DEPS_FOLDER_NAME:str, IS_EXE_LEVEL:bool):
            if DEPS_FOLDER_NAME == DEPS_ONLY_FOR_DEBUG:
                if r_d == '/release':
                    continue
+        destination_path = LEVELS_UP_TO_BUILD_DIRS + out + EXTRA_DIR_FOR_OUT + r_d
         if os.path.isfile(file):
            if is_file_arhiv (file):
-              unpack(file, LEVELS_UP_TO_BUILD_DIRS + out + r_d)
+              unpack(file, destination_path)
               continue
            print("file exists: " + file)
-           print(f"copy exe file deps {file} to: -->", LEVELS_UP_TO_BUILD_DIRS + out + r_d)
-           shutil.copy(file, LEVELS_UP_TO_BUILD_DIRS + out + r_d)
+           print(f"copy exe file deps {file} to: -->", destination_path)
+           shutil.copy(file, destination_path)
         if os.path.isdir(file):
-           file_name = LEVELS_UP_TO_BUILD_DIRS + out + r_d
-           print(f"copy dir deps {file} to: --> {file_name}")
+           print(f"copy dir deps {file} to: --> {destination_path}")
            base_name_ = os.path.basename(file)
            print("BASE NAME: -- >" + base_name_)
-           full_path = file_name + "/" + base_name_
+           full_path = destination_path + "/" + base_name_
            if not os.path.exists(full_path):
                os.mkdir(full_path)
            copytree(file, full_path)
@@ -109,8 +110,12 @@ for dir in build_dirs_list:
     if os.path.isfile(dir):
         continue
     print("BUILD folder: " + dir)
-    full_release_path = LEVELS_UP_TO_BUILD_DIRS + dir + "/" + RELEASE_DIR_NAME
-    full_debug_path = LEVELS_UP_TO_BUILD_DIRS + dir + "/" + DEBUG_DIR_NAME
+    common_path = LEVELS_UP_TO_BUILD_DIRS + dir + EXTRA_DIR_FOR_OUT
+    full_release_path = common_path + "/" + RELEASE_DIR_NAME
+    full_debug_path = common_path + "/" + DEBUG_DIR_NAME
+    if not os.path.exists(common_path):
+        print(f"!!! WARNING EXTRA DIR FOR OUT DOESN'T EXISTS !!! ---> {common_path}")
+        continue
     print ("FULL_PATH: " + full_release_path)
     if not os.path.exists(full_release_path):
        os.mkdir(full_release_path)

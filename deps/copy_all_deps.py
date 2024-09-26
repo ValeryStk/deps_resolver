@@ -25,7 +25,7 @@ EXTRA_DIR_FOR_OUT = "/MainApp"
 out_dir_list = []
 
 # COMMON FUNCTIONS
-def copytree(src, dst, symlinks=False, ignore=None):
+def copytree(src, dst, destination_path, symlinks=False, ignore=None):
     for item in os.listdir(src):
         s = os.path.join(src, item)
         d = os.path.join(dst, item)
@@ -35,6 +35,10 @@ def copytree(src, dst, symlinks=False, ignore=None):
             shutil.copytree(s, d, symlinks, ignore)
         else:
             if os.path.exists(d):
+                continue
+            if is_file_arhiv(s):
+                print(f"UNPACKING  {s} ---> {dst}")
+                unpack(s,dst)
                 continue
             shutil.copy2(s, d)
 
@@ -89,7 +93,7 @@ def resolve_deps(files_list, DEPS_FOLDER_NAME:str, IS_EXE_LEVEL:bool):
            full_path = destination_path + "/" + base_name_
            if not os.path.exists(full_path):
                os.mkdir(full_path)
-           copytree(file, full_path)
+           copytree(file, full_path, destination_path)
 
 
 # PREPARATIONS ########################################################################################################
